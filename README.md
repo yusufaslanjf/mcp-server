@@ -1,202 +1,85 @@
-# Jotform MCP Server
+# Jotform AI Integrations
 
-A Model Context Protocol (MCP) server for Jotform. This integration exposes Jotform Forms and Submissions to any MCP-compatible client via a hosted endpoint. It follows the Model Context Protocol spec for interoperability.
+![AI assistants connect through Jotform MCP to work with Forms, Sign, and Apps.](docs/assets/ai-integrations.svg)
 
-The service is actively optimized based on real-world usage and more tools are coming soon.
+**Build forms, understand responses, prepare signing documents, and create apps from your AI assistant.**
 
-## Remote Server URL
+Explore Jotform's hosted MCP services, choose a ready-to-use integration, and connect your Jotform account. This repository brings together the service documentation, client packages, and setup guides.
 
-```
+[Explore MCP](docs/mcp/README.md) · [Choose your AI tool](#choose-your-ai-tool) · [Browse integrations](integrations/README.md) · [Contribute](CONTRIBUTING.md)
+
+## What will you build?
+
+| Start with a request | Work with |
+| --- | --- |
+| “Create a customer feedback form with a rating and an optional comment.” | **Forms** — surveys, registrations, and feedback. |
+| “Summarize this week's responses to my feedback form.” | **Submissions** — explore responses and find useful patterns. |
+| “Prepare a service agreement draft using these terms.” | **Sign** — signing documents and signature status. |
+| “Create a client portal containing my onboarding form and a welcome page.” | **Apps** — portals and event apps built around your forms. |
+
+Choose an integration with the products you need. The Claude plugin also includes recipes for client onboarding and event management.
+
+## Explore the MCP service
+
+[Jotform MCP](https://www.jotform.com/mcp/) gives AI tools access to Jotform through the Model Context Protocol. Jotform hosts the service; you connect from your AI tool and authorize access to your account.
+
+For a direct forms and submissions connection, use the standard MCP server:
+
+```text
 https://mcp.jotform.com
 ```
 
-Point any MCP-enabled client to this address to begin.
+Jotform offers two experiences: **standard MCP** for text-based work with forms and submissions, and **MCP Apps** for interactive previews and views in compatible clients. MCP Apps are available for Forms, Sign, and Jotform Apps. Ready-to-use packages configure these connections and can add skills for common tasks.
 
-## Example Usage
+**[Service overview](docs/mcp/README.md)** · **[Endpoints](docs/mcp/endpoints.md)** · **[Available tools](docs/mcp/tools.md)** · **[Authentication and access](docs/mcp/authentication.md)**
 
-Ask your AI assistant to:
+## Choose your AI tool
 
-- 🗂️ **List Forms** — "List all active forms created this month."
-- 📄 **Query Submissions** — "Show submissions for form 123 where Status is Pending."
-- 💻 **Create a Form** — "Create a new feedback form for me to collect customer feedback."
-- ⌨️ **Edit a Form** — "Rename form 123 to 'NPS Survey (Q4)'."
-- 📬 **Create Submission** — "Add a new submission to form 123 with Name=Jane Doe."
+| Your tool | How to connect | What you get | Start here |
+| --- | --- | --- | --- |
+| **Claude Code, claude.ai, Cowork** | Jotform plugin; directory connector on claude.ai | Plugin: Forms, Sign, Apps, and four skills. Connector: forms and submissions. | [Choose your setup](docs/claude-setup.md) |
+| **ChatGPT** | Jotform directory connection | Jotform forms and submissions in chat. | [Connect Jotform](docs/openai-setup.md#chatgpt) |
+| **Codex** | Direct MCP connection | Forms and submissions through the hosted service. | [Configure Codex](docs/openai-setup.md#codex) |
+| **Gemini CLI** | Jotform extension | Forms and submissions with Jotform context. | [Install the extension](docs/gemini-setup.md) |
+| **Cursor, VS Code, other MCP clients** | Direct MCP connection | Forms and submissions in your existing AI tool. | [Connect your client](docs/mcp-setup.md) |
 
-## Compatibility
+### Quick install
 
-| Product | Deployment type | Support status |
-|---------|----------------|----------------|
-| Jotform | Cloud (hosted endpoint) | ✅ Fully supported via https://mcp.jotform.com |
+**Claude Code**
 
-## Quick Start Guide
+```sh
+claude plugin marketplace add jotform/mcp-server
+claude plugin install jotform@jotform-plugins
+```
 
-### For Gemini CLI
+**Gemini CLI**
 
-To get started with Gemini CLI, you can use the official Gemini CLI extension for Jotform.
-
-To install the extension, run the following command in your terminal:
-
-```bash
+```sh
 gemini extensions install https://github.com/jotform/mcp-server
 ```
 
-Once you have the extension installed, start Gemini CLI by running:
+Open your AI tool and complete the account connection in its [setup guide](docs/README.md). Then ask:
 
-```bash
-gemini
-```
+> Find my forms.
 
-Then, authenticate with your Jotform account by running the following command inside Gemini CLI:
+Once you can see your forms, try one of the requests above.
 
-```
-/mcp auth jotform
-```
+## Explore the repository
 
-This will open a browser window to complete the OAuth authentication process. After authenticating, all the Jotform tools will be available.
+| Looking for | Go to |
+| --- | --- |
+| MCP capabilities, endpoints, and account access | [MCP documentation](docs/mcp/README.md) |
+| Available packages and connections | [Integration catalog](integrations/README.md) |
+| Installation and troubleshooting | [Setup guides](docs/README.md) |
+| Package structure and validation | [Development guide](docs/plugin-development.md) |
+| A file map for repository agents | [AGENTS.md](AGENTS.md) |
 
-A few example prompts to try:
-
-```
-/jotform:create-form contact form with name, email, and message
-/jotform:list-forms
-/jotform:get-submissions 123456789
-```
-
-### 🔐 1) Authentication Setup (OAuth 2.0)
-
-Jotform MCP requires OAuth for every user on first connect. Bearer-token access is not supported.
-
-1. Add the server URL in your MCP client
-2. You'll be shown a Jotform OAuth consent screen to authorize access to your Jotform data
-3. Only workspace admins can install the Jotform MCP app
-
-#### View Authorized MCP Clients
-
-1. Sign in to Jotform Dashboard
-2. My Account → Connected Apps
-3. Select Jotform MCP
-4. Open Clients to see all OAuth-connected MCP clients
-
-#### Revoke OAuth Access for a Specific Client
-
-1. In Clients, find the target client
-2. Click the overflow menu (⋮)
-3. Choose Revoke — access is removed immediately
-
-**Note:** OAuth 2.0 is required for all connections.
-
-### 📦 2) Installation
-
-No server install needed.
-
-- Use the hosted endpoint: `https://mcp.jotform.com`
-- Add the URL in your MCP-capable client and authorize
-
-## 🛠️ IDE Integration
-
-### Gemini CLI
-
-```bash
-# Install extension
-gemini extensions install https://github.com/jotform/mcp-server
-
-# Start and authenticate
-gemini
-/mcp auth jotform
-```
-
-### Cursor IDE
-
-Settings → MCP Servers → Add:
-
-```json
-{
-  "mcpServers": {
-    "jotform": {
-      "url": "https://mcp.jotform.com"
-    }
-  }
-}
-```
-
-### Claude Desktop
-
-Add to your configuration:
-
-```json
-{
-  "mcpServers": {
-    "jotform": {
-      "url": "https://mcp.jotform.com"
-    }
-  }
-}
-```
-
-### VS Code Extension
-
-Command Palette → "MCP: Add Server" → paste URL → Authorize
-
-No extra configuration is needed after approval.
-
-## Configuration
-
-### ⚙️ Configuration Methods
-
-Configuration options are minimal — only OAuth setup is required.
-
-### 👥 HTTP Transport Configuration
-
-The server communicates over HTTPS using standard MCP client-server interactions.
-
-## Tools
-
-### Key Tools
-
-- `list_forms` - Get the list of your forms
-- `create_form` - Create a new form
-- `edit_form` - Edit an existing form
-- `create_submission` - Make a submission to an existing form
-- `get_submissions` - Get all submissions of a form
-- `assign_form` - Assign form to user
-
-This MCP is actively maintained, and more tools will come soon.
-
-### Tool Filtering & Access Control
-
-Access control is managed via OAuth scopes. Only explicitly granted scopes are available to the client.
-
-## Troubleshooting & Debugging
-
-### Rate Limits
-
-Rate limits (same per-user as the Jotform REST API):
-
-| Plan | Requests per minute |
-|------|---------------------|
-| Free | 60 |
-| Enterprise | 600 |
-
-If limits are exceeded, the server returns HTTP 429 with a Retry-After header.
-
-**Important:** Ensure you complete the OAuth flow; bearer tokens are not accepted.
-
-## Security
-
-- OAuth 2.0 required for all connections
-- Bearer-token access is not supported
-- Manage and revoke client access via: Account → Connected Apps → Jotform MCP → Clients
-
-## Contributing
-
-Follow GitHub discussions or contact the Jotform support team for early access opportunities and updates on the timeline.
-
-## License
-
-MIT
+For Jotform's product overview and full service reference, visit [Jotform MCP](https://www.jotform.com/mcp/) and the [MCP developer documentation](https://www.jotform.com/developers/mcp/).
 
 ## Support
 
-- **Email**: support@jotform.com (CC: mcp@jotform.com)
-- **Support Inbox**: https://www.jotform.com/answers (use tag MCP)
-- **Feedback Form**: Share feature requests — your feedback drives the roadmap
+For help connecting or using Jotform, visit [Jotform Support](https://www.jotform.com/answers/) or email [support@jotform.com](mailto:support@jotform.com), copying [mcp@jotform.com](mailto:mcp@jotform.com). Include the AI tool and the connection you are using.
+
+For a documentation or package issue, [open an issue](https://github.com/jotform/mcp-server/issues).
+
+[Privacy](https://www.jotform.com/privacy/) · [Terms](https://www.jotform.com/terms/) · [MIT license](LICENSE)

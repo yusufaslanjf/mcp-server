@@ -1,0 +1,12 @@
+{
+  "name": "jotform-plugins",
+  "description": "Jotform plugins for forms, signing documents, and apps.",
+  "owner": { "name": "Jotform Inc." },
+  "plugins": [
+    {
+      "name": "jotform",
+      "source": "./integrations/claude/jotform",
+      "description": "Build surveys, registration and RSVP forms, and feedback forms. Prepare a contract for signature, or turn a form into a client portal."
+    }
+  ]
+}

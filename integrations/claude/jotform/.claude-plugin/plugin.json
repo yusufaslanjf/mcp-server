@@ -1,0 +1,10 @@
+{
+  "name": "jotform",
+  "displayName": "Jotform",
+  "version": "0.1.0",
+  "description": "Build surveys, registration and RSVP forms, and feedback forms. Prepare a contract for signature, or turn a form into a client portal.",
+  "author": { "name": "Jotform Inc.", "url": "https://www.jotform.com" },
+  "homepage": "https://www.jotform.com",
+  "repository": "https://github.com/jotform/mcp-server",
+  "license": "MIT"
+}
