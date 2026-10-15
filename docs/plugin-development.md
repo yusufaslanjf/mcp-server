@@ -12,6 +12,7 @@ This repository contains service documentation and client packages for Jotform's
 | `integrations/README.md` | Catalog of available packages and connection routes. |
 | `.claude-plugin/marketplace.json` | Claude marketplace catalog. |
 | `integrations/claude/` | Claude index and the self-contained `jotform/` plugin. |
+| `integrations/claude/jotform/.claude-plugin/plugin.json` | Plugin identity, explicit skill directory references, and inline MCP connections. |
 | `integrations/openai/` | ChatGPT and Codex connection routes and package status. |
 | `integrations/gemini/` | Gemini CLI index linking to the root extension files. |
 | `gemini-extension.json` | Gemini extension manifest and MCP connection. |
@@ -21,12 +22,14 @@ This repository contains service documentation and client packages for Jotform's
 
 ## Make a change
 
-- **Skills:** edit `integrations/claude/jotform/skills/<skill-name>/SKILL.md`. Keep supporting references inside that skill directory.
-- **Connections:** edit the client's MCP configuration, the endpoint reference, and affected setup examples.
+- **Skills:** edit `integrations/claude/jotform/skills/<skill-name>/SKILL.md`. Keep supporting references inside that skill directory. When adding or removing a skill, update the plugin manifest's `skills` array.
+- **Connections:** edit `mcpServers` in the Claude plugin manifest or Gemini extension manifest, the endpoint reference, and affected setup examples.
 - **New Claude plugin:** add `integrations/claude/<plugin-name>/`, register it in the root marketplace, and link it from the Claude index. Keep the marketplace entry name and plugin manifest name identical.
 - **Documentation:** put installation steps in `docs/`, package capabilities and examples in the package README, and agent behavior in skill or context files.
 
 The root Claude marketplace is a catalog pointing to the plugin folder. The Gemini manifest and context stay at the repository root so the repository URL works as an extension installation source. See the [Claude marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces) and [Gemini extension reference](https://geminicli.com/docs/extensions/reference/).
+
+The Claude plugin manifest declares its MCP servers inline and lists each skill directory. Skill paths resolve from the plugin root (`integrations/claude/jotform/`), so `./skills/jotform-forms` points to that skill's directory. See the [Claude manifest reference](https://code.claude.com/docs/en/plugins-reference).
 
 Each installed package must include its own runtime resources. Keep shared source inside a package or copy it into each distribution when packaging; avoid links to files outside the installed package.
 
@@ -45,7 +48,7 @@ python3 scripts/validate.py
 git diff --check
 ```
 
-The validator checks local Markdown links and anchors, JSON files and examples, Claude catalog paths and identities, Gemini context, skill metadata, and endpoint documentation. The same command runs in GitHub Actions.
+The validator checks local Markdown links and anchors, JSON files and examples, Claude catalog paths and identities, inline MCP connections, declared skill directories, Gemini context, skill metadata, and endpoint documentation. The same command runs in GitHub Actions.
 
 With Claude Code installed, also validate its catalog and package:
 

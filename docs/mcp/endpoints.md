@@ -7,9 +7,9 @@ For a standard connection, use `https://mcp.jotform.com`, the address in [Jotfor
 | Connection | Endpoint | Purpose | Configuration |
 | --- | --- | --- | --- |
 | Standard MCP | `https://mcp.jotform.com` | Text-based forms and submissions. | [Direct client setup](../mcp-setup.md); [Codex setup](../openai-setup.md#codex) |
-| Forms MCP App | `https://mcp.jotform.com/mcp-app` | Forms and submissions with interactive views in compatible clients. | [Claude MCP configuration](../../integrations/claude/jotform/.mcp.json) |
-| Jotform Sign | `https://mcp.jotform.com/mcp-sign-v1` | Signing documents, signers, and signature status. | [Claude MCP configuration](../../integrations/claude/jotform/.mcp.json) |
-| Jotform Apps | `https://mcp.jotform.com/mcp-jotform-apps-v1` | App and portal creation and editing. | [Claude MCP configuration](../../integrations/claude/jotform/.mcp.json) |
+| Forms MCP App | `https://mcp.jotform.com/mcp-app` | Forms and submissions with interactive views in compatible clients. | [Claude plugin manifest](../../integrations/claude/jotform/.claude-plugin/plugin.json) |
+| Jotform Sign | `https://mcp.jotform.com/mcp-sign-v1` | Signing documents, signers, and signature status. | [Claude plugin manifest](../../integrations/claude/jotform/.claude-plugin/plugin.json) |
+| Jotform Apps | `https://mcp.jotform.com/mcp-jotform-apps-v1` | App and portal creation and editing. | [Claude plugin manifest](../../integrations/claude/jotform/.claude-plugin/plugin.json) |
 
 The [Gemini extension](../../gemini-extension.json) uses `https://mcp.jotform.com/default`, the explicit route to the same standard MCP service. Both addresses select the standard tool set.
 

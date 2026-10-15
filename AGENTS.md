@@ -10,7 +10,7 @@ This repository documents Jotform's hosted MCP services and packages integration
 | Explain MCP services, tools, or account access | `docs/mcp/README.md`, `docs/mcp/endpoints.md`, `docs/mcp/tools.md`, `docs/mcp/authentication.md` |
 | Find available integrations | `integrations/README.md` |
 | Change Claude plugin behavior | `integrations/claude/jotform/skills/` |
-| Change Claude connections | `integrations/claude/jotform/.mcp.json` |
+| Change Claude connections or skill references | `integrations/claude/jotform/.claude-plugin/plugin.json` (`mcpServers` and `skills`) |
 | Change Claude package metadata or catalog | `integrations/claude/jotform/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` |
 | Change Gemini connections or context | `gemini-extension.json` and `JOTFORM.md` |
 | Update setup instructions | `docs/*-setup.md`, indexed in `docs/README.md` |
@@ -26,6 +26,7 @@ This repository documents Jotform's hosted MCP services and packages integration
 - Preserve the root Gemini manifest and its declared context file; direct repository installation depends on that layout.
 - OpenAI currently has connection guides but no plugin package in this repository. Describe only the distribution routes that exist.
 - Keep installed packages self-contained. Preserve plugin names and service URLs unless the task explicitly changes them.
+- Keep Claude MCP connections inline in `plugin.json` and list each bundled skill directory in its `skills` array. Update that list when adding or removing a skill.
 
 ## Verify changes
 

@@ -103,15 +103,44 @@ def main():
         check(manifest.get("name") == name, f"{source}: manifest name must match {name}")
         check(bool(manifest.get("version")), f"{source}: package version missing")
         check((package / "README.md").is_file(), f"{source}: package README missing")
-        config = json_files.get(package / ".mcp.json", {}).get("mcpServers", {})
-        check(bool(config), f"{source}: MCP configuration missing")
+        config = manifest.get("mcpServers", {})
+        if not isinstance(config, dict) or not config:
+            errors.append(f"{source}: inline mcpServers configuration missing or invalid")
+            config = {}
+        check(not (package / ".mcp.json").exists(),
+              f"{source}: keep MCP connections in plugin.json, not a separate .mcp.json")
         for server, settings in config.items():
+            if not isinstance(settings, dict):
+                errors.append(f"{source}: {server} configuration must be an object")
+                continue
             url = settings.get("url", "")
             check(settings.get("type") == "http" and url.startswith("https://"),
                   f"{source}: {server} must have an HTTPS HTTP configuration")
             if url:
                 endpoints.add(url)
-        for skill in package.glob("skills/*/SKILL.md"):
+        skill_paths = manifest.get("skills", [])
+        if not isinstance(skill_paths, list) or not skill_paths:
+            errors.append(f"{source}: skills must list each bundled skill directory")
+            skill_paths = []
+        declared_skills = set()
+        for value in skill_paths:
+            if not isinstance(value, str) or not value.startswith("./"):
+                errors.append(f"{source}: invalid skill directory reference: {value}")
+                continue
+            directory = local_path(package, value)
+            if directory is None:
+                continue
+            if not directory.is_relative_to(package):
+                errors.append(f"{source}: skill directory leaves plugin: {value}")
+                continue
+            skill = directory / "SKILL.md"
+            check(skill.is_file(), f"{source}: skill directory has no SKILL.md: {value}")
+            check(skill not in declared_skills, f"{source}: duplicate skill reference: {value}")
+            declared_skills.add(skill)
+        packaged_skills = set(package.glob("skills/*/SKILL.md"))
+        check(declared_skills == packaged_skills,
+              f"{source}: manifest skills must match the bundled skill directories")
+        for skill in sorted(packaged_skills):
             content = documents[skill]
             frontmatter = re.match(r"\A---\n(.*?)\n---(?:\n|$)", content, re.S)
             if not frontmatter:
